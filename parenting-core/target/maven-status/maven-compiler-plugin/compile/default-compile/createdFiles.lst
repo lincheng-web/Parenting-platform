@@ -1,0 +1,14 @@
+com\parenting\core\entity\Device.class
+com\parenting\core\entity\LocationLog$Builder.class
+com\parenting\core\service\LocationLogService.class
+com\parenting\core\service\RagService.class
+com\parenting\core\repository\LocationLogRepository.class
+com\parenting\core\service\GeoFenceService.class
+com\parenting\core\entity\Child.class
+com\parenting\core\entity\GeoFence.class
+com\parenting\core\repository\DeviceRepository.class
+com\parenting\core\service\DeviceService.class
+com\parenting\core\repository\GeoFenceRepository.class
+com\parenting\core\service\BaiduMapService.class
+com\parenting\core\entity\LocationLog.class
+com\parenting\core\entity\SysUser.class

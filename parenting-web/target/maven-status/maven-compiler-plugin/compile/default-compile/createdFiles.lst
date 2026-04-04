@@ -1,0 +1,5 @@
+com\parenting\web\handler\WebSocketHandler.class
+com\parenting\web\config\WebSocketConfig.class
+com\parenting\web\controller\HardwareController$LocationUploadRequest.class
+com\parenting\web\controller\HardwareController.class
+com\parenting\web\task\GeoFenceTask.class

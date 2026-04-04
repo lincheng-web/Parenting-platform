@@ -1,0 +1,66 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
+    {
+      "path": "pages/ai-ask/ai-ask",
+      "style": {
+        "navigationBarTitleText": "AI速问"
+      }
+    },
+    {
+      "path": "pages/knowledge/knowledge",
+      "style": {
+        "navigationBarTitleText": "专家知识库"
+      }
+    },
+    {
+      "path": "pages/explore/explore",
+      "style": {
+        "navigationBarTitleText": "周边探索"
+      }
+    },
+    {
+      "path": "pages/fence/edit",
+      "style": {
+        "navigationBarTitleText": "围栏设置"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "育儿平台",
+    "navigationBarBackgroundColor": "#F8F8F8F",
+    "backgroundColor": "#F8F8F8F"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#52c41a",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tab-home.png",
+        "selectedIconPath": "static/tab-home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/fence/edit",
+        "iconPath": "static/tab-fence.png",
+        "selectedIconPath": "static/tab-fence-active.png",
+        "text": "围栏"
+      }
+    ]
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"
+    }
+  }
+}

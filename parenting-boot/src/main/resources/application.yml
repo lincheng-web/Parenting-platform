@@ -1,0 +1,61 @@
+spring:
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/parenting_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password: 
+    database: 0
+
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# 服务器配置
+server:
+  port: 8888
+  servlet:
+    context-path: /
+
+# 百度地图API配置
+baidu:
+  map:
+    ak: ${BAIDU_MAP_AUTH_TOKEN:your_baidu_map_api_key}
+
+# DeepSeek API配置
+deepseek:
+  api:
+    key: ${DEEPSEEK_API_KEY:sk-bc059f3f1d5f4c9db3f7676b4f37fb82}
+    chat:
+      endpoint: https://api.deepseek.com/v1/chat/completions
+    embedding:
+      endpoint: https://api.deepseek.com/v1/embeddings
+
+# Milvus配置
+milvus:
+  host: localhost
+  port: 19530
+  collection: parenting_collection
+
+# 文件上传配置
+file:
+  upload:
+    dir: uploads/
+    max-size: 100MB
+
+# 日志配置
+logging:
+  level:
+    root: info
+    com.parenting: debug
