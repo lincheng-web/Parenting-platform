@@ -1,76 +1,71 @@
 <template>
   <view class="container">
-    <!-- 顶部状态栏 -->
-    <view class="status-bar">
-      <view class="child-status">
-        <image class="child-avatar" :src="child.avatarUrl || '/static/avatar.png'"></image>
-        <view class="child-info">
-          <text class="child-name">{{ child.name }}</text>
-          <text class="child-location">{{ child.location || '位置未知' }}</text>
+    <!-- 顶部宝宝状态 -->
+    <view class="baby-status">
+      <view class="baby-avatar">
+        <text class="avatar-emoji">👶</text>
+      </view>
+      <view class="baby-info">
+        <text class="baby-name">小明</text>
+        <text class="baby-location">📍 学校附近</text>
+      </view>
+      <view class="device-info">
+        <text class="battery-text">🔋 电量充足</text>
+      </view>
+    </view>
+
+    <!-- 功能入口 -->
+    <view class="function-section">
+      <text class="section-title">今天想做什么呢？</text>
+      
+      <view class="function-grid">
+        <view class="function-card" @tap="goToAIAsk">
+          <view class="card-icon-box">
+            <text class="card-emoji">💬</text>
+          </view>
+          <text class="card-name">问问老师</text>
+          <text class="card-hint">育儿问题随时问</text>
         </view>
-        <view class="device-status">
-          <text class="battery">电量: {{ device.battery }}%</text>
+
+        <view class="function-card" @tap="goToKnowledge">
+          <view class="card-icon-box">
+            <text class="card-emoji">📚</text>
+          </view>
+          <text class="card-name">育儿知识</text>
+          <text class="card-hint">专家经验学起来</text>
+        </view>
+
+        <view class="function-card" @tap="goToExplore">
+          <view class="card-icon-box">
+            <text class="card-emoji">🌳</text>
+          </view>
+          <text class="card-name">去哪玩</text>
+          <text class="card-hint">周边好地方找找</text>
         </view>
       </view>
     </view>
 
-    <!-- 中部功能卡片 -->
-    <view class="function-cards">
-      <!-- AI速问 -->
-      <view class="card" @tap="goToAIAsk">
-        <view class="card-icon ai-icon">
-          <text class="icon-text">💬</text>
-        </view>
-        <view class="card-content">
-          <text class="card-title">AI速问</text>
-          <text class="card-desc">基础层：DeepSeek API 直接问答</text>
-        </view>
-        <text class="arrow">›</text>
-      </view>
-
-      <!-- 专家知识库 -->
-      <view class="card" @tap="goToKnowledge">
-        <view class="card-icon knowledge-icon">
-          <text class="icon-text">📚</text>
-        </view>
-        <view class="card-content">
-          <text class="card-title">专家知识库</text>
-          <text class="card-desc">增强层：基于本地 PDF 育儿书籍的 RAG 问答</text>
-        </view>
-        <text class="arrow">›</text>
-      </view>
-
-      <!-- 周边探索 -->
-      <view class="card" @tap="goToExplore">
-        <view class="card-icon explore-icon">
-          <text class="icon-text">📍</text>
-        </view>
-        <view class="card-content">
-          <text class="card-title">周边探索</text>
-          <text class="card-desc">硬件层：百度地图 POI 推荐活动</text>
-        </view>
-        <text class="arrow">›</text>
-      </view>
-    </view>
-
-    <!-- 底部告警记录 -->
+    <!-- 最近提醒 -->
     <view class="alert-section">
-      <view class="section-title">
-        <text>最近告警</text>
-        <text class="more" @tap="goToAlerts">查看全部</text>
+      <view class="section-header">
+        <text class="section-title">最近提醒</text>
+        <text class="view-all" @tap="goToAlerts">看全部</text>
       </view>
+      
       <view class="alert-list">
-        <view v-for="(alert, index) in alerts" :key="index" class="alert-item">
+        <view v-for="(alert, index) in alerts" :key="index" class="alert-card">
           <view class="alert-icon">
             <text class="alert-emoji">⚠️</text>
           </view>
-          <view class="alert-content">
-            <text class="alert-title">{{ alert.title }}</text>
+          <view class="alert-info">
+            <text class="alert-text">{{ alert.title }}</text>
             <text class="alert-time">{{ alert.time }}</text>
           </view>
         </view>
-        <view v-if="alerts.length === 0" class="empty-alert">
-          <text>暂无告警记录</text>
+        
+        <view v-if="alerts.length === 0" class="empty-state">
+          <text class="empty-emoji">🎉</text>
+          <text class="empty-text">宝宝今天表现很好哦</text>
         </view>
       </view>
     </view>
@@ -81,29 +76,17 @@
 export default {
   data() {
     return {
-      child: {
-        name: '小明',
-        avatarUrl: '',
-        location: '学校附近'
-      },
-      device: {
-        battery: 85
-      },
       alerts: [
         {
-          title: '小明在规定时间不在学校',
-          time: '2026-04-03 15:30'
+          title: '小明离开学校范围',
+          time: '今天 15:30'
         },
         {
-          title: '小明离开家范围',
-          time: '2026-04-03 08:15'
+          title: '电量低于20%',
+          time: '今天 08:15'
         }
       ]
     };
-  },
-  onLoad() {
-    // 初始化WebSocket连接
-    this.initWebSocket();
   },
   methods: {
     goToAIAsk() {
@@ -122,18 +105,10 @@ export default {
       });
     },
     goToAlerts() {
-      uni.navigateTo({
-        url: '/pages/alerts/alerts'
+      uni.showToast({
+        title: '这个功能还在准备中',
+        icon: 'none'
       });
-    },
-    initWebSocket() {
-      // WebSocket连接逻辑
-      const token = uni.getStorageSync('token');
-      if (token) {
-        // 实际项目中应该使用真实的WebSocket地址
-        const wsUrl = `ws://localhost:8080/ws/connect/${token}`;
-        // 这里应该实现WebSocket连接逻辑
-      }
     }
   }
 };
@@ -141,193 +116,205 @@ export default {
 
 <style scoped>
 .container {
-  flex: 1;
-  background-color: #f5f5f5;
+  min-height: 100vh;
+  background-color: #F9F7F3;
+  padding: 20px;
 }
 
-.status-bar {
-  background: linear-gradient(135deg, #52c41a, #73d13d);
-  padding: 20rpx;
-  border-radius: 0 0 20rpx 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
-}
-
-.child-status {
+/* 宝宝状态栏 */
+.baby-status {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  color: white;
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
+  margin-bottom: 24px;
 }
 
-.child-avatar {
-  width: 80rpx;
-  height: 80rpx;
+.baby-avatar {
+  width: 56px;
+  height: 56px;
+  background-color: #7BAE7F;
   border-radius: 50%;
-  margin-right: 20rpx;
-  border: 2rpx solid white;
-}
-
-.child-info {
-  flex: 1;
-}
-
-.child-name {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin-bottom: 8rpx;
-  display: block;
-}
-
-.child-location {
-  font-size: 24rpx;
-  opacity: 0.9;
-}
-
-.device-status {
-  text-align: right;
-}
-
-.battery {
-  font-size: 24rpx;
-  opacity: 0.9;
-}
-
-.function-cards {
-  padding: 20rpx;
-  margin-top: 20rpx;
-}
-
-.card {
-  background: white;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s;
-}
-
-.card:active {
-  transform: scale(0.98);
-}
-
-.card-icon {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 20rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20rpx;
+  margin-right: 12px;
 }
 
-.icon-text {
-  font-size: 40rpx;
+.avatar-emoji {
+  font-size: 32px;
 }
 
-.arrow {
-  font-size: 40rpx;
-  color: #999;
-}
-
-.ai-icon {
-  background-color: #e6f7ee;
-}
-
-.knowledge-icon {
-  background-color: #fff7e6;
-}
-
-.explore-icon {
-  background-color: #e6f7ff;
-}
-
-.card-content {
+.baby-info {
   flex: 1;
 }
 
-.card-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin-bottom: 8rpx;
+.baby-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #5A4B38;
   display: block;
+  margin-bottom: 4px;
 }
 
-.card-desc {
-  font-size: 24rpx;
-  color: #666;
-  line-height: 1.4;
+.baby-location {
+  font-size: 14px;
+  color: #8B7355;
 }
 
-.alert-section {
-  padding: 20rpx;
-  margin-top: 20rpx;
+.device-info {
+  text-align: right;
+}
+
+.battery-text {
+  font-size: 14px;
+  color: #7BAE7F;
+}
+
+/* 功能区域 */
+.function-section {
+  margin-bottom: 24px;
 }
 
 .section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #5A4B38;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.function-grid {
+  display: flex;
+  gap: 12px;
+}
+
+.function-card {
+  flex: 1;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
+  transition: background-color 0.2s;
+}
+
+.function-card:active {
+  background-color: #F5F3ED;
+}
+
+.card-icon-box {
+  width: 48px;
+  height: 48px;
+  background-color: #F9F7F3;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.card-emoji {
+  font-size: 28px;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #5A4B38;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.card-hint {
+  font-size: 12px;
+  color: #8B7355;
+}
+
+/* 提醒区域 */
+.alert-section {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
+}
+
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20rpx;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E8E5E0;
 }
 
-.section-title text:first-child {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+.section-header .section-title {
+  margin-bottom: 0;
 }
 
-.more {
-  font-size: 24rpx;
-  color: #52c41a;
+.view-all {
+  font-size: 14px;
+  color: #7BAE7F;
 }
 
 .alert-list {
-  background: white;
-  border-radius: 20rpx;
-  padding: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.alert-item {
+.alert-card {
   display: flex;
   align-items: center;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.alert-item:last-child {
-  border-bottom: none;
+  padding: 12px;
+  background-color: #F9F7F3;
+  border-radius: 8px;
 }
 
 .alert-icon {
-  margin-right: 20rpx;
+  margin-right: 12px;
 }
 
 .alert-emoji {
-  font-size: 32rpx;
+  font-size: 24px;
 }
 
-.alert-content {
+.alert-info {
   flex: 1;
 }
 
-.alert-title {
-  font-size: 28rpx;
-  color: #333;
-  margin-bottom: 8rpx;
+.alert-text {
+  font-size: 15px;
+  color: #5A4B38;
   display: block;
+  margin-bottom: 4px;
 }
 
 .alert-time {
-  font-size: 22rpx;
-  color: #999;
+  font-size: 12px;
+  color: #8B7355;
 }
 
-.empty-alert {
+.empty-state {
   text-align: center;
-  padding: 40rpx 0;
-  color: #999;
-  font-size: 24rpx;
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-emoji {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: #8B7355;
 }
 </style>

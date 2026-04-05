@@ -1,61 +1,34 @@
 spring:
-  # 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/parenting_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 123456
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-  # Redis配置
   redis:
-    host: localhost
-    port: 6379
-    password: 
-    database: 0
-
-  # JPA配置
+    host: ${SPRING_REDIS_HOST}
+    port: ${SPRING_REDIS_PORT}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
 
-# 服务器配置
-server:
-  port: 8888
-  servlet:
-    context-path: /
+jwt:
+  secret: ${JWT_SECRET}
+  expire: ${JWT_EXPIRE:86400}
 
-# 百度地图API配置
+admin:
+  init:
+    username: ${ADMIN_INIT_USERNAME:admin}
+    password: ${ADMIN_INIT_PASSWORD:admin123}
+
+milvus:
+  host: ${MILVUS_HOST:localhost}
+  port: ${MILVUS_PORT:19530}
+
 baidu:
   map:
-    ak: ${BAIDU_MAP_AUTH_TOKEN:your_baidu_map_api_key}
+    ak: ${BAIDU_MAP_AK}
 
-# DeepSeek API配置
 deepseek:
   api:
-    key: ${DEEPSEEK_API_KEY:sk-bc059f3f1d5f4c9db3f7676b4f37fb82}
-    chat:
-      endpoint: https://api.deepseek.com/v1/chat/completions
-    embedding:
-      endpoint: https://api.deepseek.com/v1/embeddings
-
-# Milvus配置
-milvus:
-  host: localhost
-  port: 19530
-  collection: parenting_collection
-
-# 文件上传配置
-file:
-  upload:
-    dir: uploads/
-    max-size: 100MB
-
-# 日志配置
-logging:
-  level:
-    root: info
-    com.parenting: debug
+    key: sk-4ced5c85cf5a4377bd4ac66f67e117ee

@@ -7,41 +7,108 @@
       }
     },
     {
+      "path": "pages/growth/growth",
+      "style": {
+        "navigationBarTitleText": "成长记录"
+      }
+    },
+    {
+      "path": "pages/tools/tools",
+      "style": {
+        "navigationBarTitleText": "亲子工具"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
       "path": "pages/ai-ask/ai-ask",
       "style": {
-        "navigationBarTitleText": "AI速问"
+        "navigationBarTitleText": "问问老师"
       }
     },
     {
       "path": "pages/knowledge/knowledge",
       "style": {
-        "navigationBarTitleText": "专家知识库"
+        "navigationBarTitleText": "育儿知识"
       }
     },
     {
       "path": "pages/explore/explore",
       "style": {
-        "navigationBarTitleText": "周边探索"
+        "navigationBarTitleText": "去哪玩"
       }
     },
     {
       "path": "pages/fence/edit",
       "style": {
-        "navigationBarTitleText": "围栏设置"
+        "navigationBarTitleText": "安全围栏"
+      }
+    },
+    {
+      "path": "pages/admin/login",
+      "style": {
+        "navigationBarTitleText": "管理员登录"
+      }
+    },
+    {
+      "path": "pages/admin/index",
+      "style": {
+        "navigationBarTitleText": "管理后台",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/admin/user/list",
+      "style": {
+        "navigationBarTitleText": "用户管理"
+      }
+    },
+    {
+      "path": "pages/admin/role/list",
+      "style": {
+        "navigationBarTitleText": "角色管理"
+      }
+    },
+    {
+      "path": "pages/admin/permission/list",
+      "style": {
+        "navigationBarTitleText": "权限管理"
+      }
+    },
+    {
+      "path": "pages/admin/menu/list",
+      "style": {
+        "navigationBarTitleText": "菜单管理"
+      }
+    },
+    {
+      "path": "pages/admin/log/list",
+      "style": {
+        "navigationBarTitleText": "系统日志"
+      }
+    },
+    {
+      "path": "pages/admin/config/list",
+      "style": {
+        "navigationBarTitleText": "系统配置"
       }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "育儿平台",
-    "navigationBarBackgroundColor": "#F8F8F8F",
-    "backgroundColor": "#F8F8F8F"
+    "navigationBarBackgroundColor": "#F9F7F3",
+    "backgroundColor": "#F9F7F3"
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#52c41a",
+    "color": "#8B7355",
+    "selectedColor": "#7BAE7F",
     "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#FFFFFF",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -50,10 +117,22 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/fence/edit",
-        "iconPath": "static/tab-fence.png",
-        "selectedIconPath": "static/tab-fence-active.png",
-        "text": "围栏"
+        "pagePath": "pages/growth/growth",
+        "iconPath": "static/tab-growth.png",
+        "selectedIconPath": "static/tab-growth-active.png",
+        "text": "成长记录"
+      },
+      {
+        "pagePath": "pages/tools/tools",
+        "iconPath": "static/tab-tools.png",
+        "selectedIconPath": "static/tab-tools-active.png",
+        "text": "亲子工具"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "iconPath": "static/tab-mine.png",
+        "selectedIconPath": "static/tab-mine-active.png",
+        "text": "我的"
       }
     ]
   },

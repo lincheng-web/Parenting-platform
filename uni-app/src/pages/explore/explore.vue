@@ -1,54 +1,61 @@
 <template>
   <view class="container">
     <view class="header">
-    <view class="back-btn" @tap="goBack">
-      <text class="back-icon">‹</text>
-    </view>
-    <text class="title">周边探索</text>
-  </view>
-
-  <view class="content">
-    <view class="location-info">
-      <text class="location-emoji">📍</text>
-      <text class="location-text">当前位置：{{ currentLocation }}</text>
+      <view class="back-btn" @tap="goBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="title">去哪玩</text>
     </view>
 
-      <view class="category-tabs">
-        <view 
-          v-for="(category, index) in categories" 
-          :key="index" 
-          class="tab-item" 
-          :class="{ active: currentCategory === category.value }"
-          @tap="selectCategory(category.value)"
-        >
-          <text class="tab-emoji">{{ category.emoji }}</text>
-          <text class="tab-text">{{ category.name }}</text>
+    <view class="content">
+      <view class="location-card">
+        <text class="location-emoji">📍</text>
+        <text class="location-text">当前位置：{{ currentLocation }}</text>
+      </view>
+
+      <view class="category-section">
+        <text class="section-title">想找什么呢？</text>
+        <view class="category-grid">
+          <view 
+            v-for="(category, index) in categories" 
+            :key="index" 
+            class="category-card" 
+            :class="{ active: currentCategory === category.value }"
+            @tap="selectCategory(category.value)"
+          >
+            <text class="category-emoji">{{ category.emoji }}</text>
+            <text class="category-name">{{ category.name }}</text>
+          </view>
         </view>
       </view>
 
-      <scroll-view class="poi-list" scroll-y>
-        <view v-if="loading" class="loading">
-          <text>正在搜索周边...</text>
+      <view class="poi-section">
+        <view v-if="loading" class="loading-state">
+          <text class="loading-emoji">🔍</text>
+          <text class="loading-text">正在帮您找呢～</text>
         </view>
-        <view v-else-if="poiList.length === 0" class="empty">
-          <text>暂无相关地点</text>
+        <view v-else-if="poiList.length === 0" class="empty-state">
+          <text class="empty-emoji">🤔</text>
+          <text class="empty-text">附近好像没有找到这个地方</text>
         </view>
-        <view v-else>
-          <view v-for="(poi, index) in poiList" :key="index" class="poi-item" @tap="selectPOI(poi)">
-            <view class="poi-icon">
+        <view v-else class="poi-list">
+          <view v-for="(poi, index) in poiList" :key="index" class="poi-card" @tap="selectPOI(poi)">
+            <view class="poi-icon-box">
               <text class="poi-emoji">📍</text>
             </view>
             <view class="poi-info">
               <text class="poi-name">{{ poi.name }}</text>
               <text class="poi-address">{{ poi.address }}</text>
-              <text class="poi-distance">距离：{{ poi.distance }}米</text>
+              <view class="poi-meta">
+                <text class="poi-distance">🚶 {{ poi.distance }}米</text>
+              </view>
             </view>
-            <view class="poi-action">
-              <text class="poi-arrow">›</text>
+            <view class="poi-arrow">
+              <text class="arrow-icon">›</text>
             </view>
           </view>
         </view>
-      </scroll-view>
+      </view>
     </view>
   </view>
 </template>
@@ -82,13 +89,13 @@ export default {
         type: 'gcj02',
         success: (res) => {
           const { latitude, longitude } = res;
-          this.currentLocation = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          this.currentLocation = '学校附近';
           this.searchNearbyPOI(latitude, longitude);
         },
         fail: () => {
           this.currentLocation = '无法获取位置';
           uni.showToast({
-            title: '获取位置失败',
+            title: '获取位置失败啦',
             icon: 'none'
           });
         }
@@ -103,7 +110,7 @@ export default {
       this.poiList = [];
 
       try {
-        const response = await uni.request({
+        uni.request({
           url: 'http://localhost:8888/api/explore/nearby',
           method: 'POST',
           data: {
@@ -114,18 +121,25 @@ export default {
           },
           header: {
             'Content-Type': 'application/json'
+          },
+          success: (res) => {
+            this.loading = false;
+            console.log('API响应:', res);
+            if (res.statusCode === 200 && res.data && res.data.pois) {
+              this.poiList = res.data.pois;
+            } else {
+              this.poiList = this.getMockPOI();
+            }
+          },
+          fail: (err) => {
+            this.loading = false;
+            console.error('网络错误:', err);
+            this.poiList = this.getMockPOI();
           }
         });
-
-        this.loading = false;
-
-        if (response[1].data && response[1].data.pois) {
-          this.poiList = response[1].data.pois;
-        } else {
-          this.poiList = this.getMockPOI();
-        }
       } catch (error) {
         this.loading = false;
+        console.error('异常:', error);
         this.poiList = this.getMockPOI();
       }
     },
@@ -163,146 +177,195 @@ export default {
 
 <style scoped>
 .container {
-  height: 100vh;
-  background-color: #f5f5f5;
+  min-height: 100vh;
+  background-color: #F9F7F3;
   display: flex;
   flex-direction: column;
 }
 
 .header {
-  background: white;
-  padding: 20rpx;
+  background-color: #FFFFFF;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
 }
 
 .back-btn {
-  width: 60rpx;
-  height: 60rpx;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .back-icon {
-  font-size: 48rpx;
-  color: #333;
+  font-size: 28px;
+  color: #5A4B38;
 }
 
 .title {
   flex: 1;
   text-align: center;
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  color: #5A4B38;
 }
 
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 20rpx;
+  padding: 20px;
 }
 
-.location-info {
-  background: white;
-  border-radius: 20rpx;
-  padding: 30rpx;
+.location-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
+  margin-bottom: 20px;
 }
 
 .location-emoji {
-  font-size: 40rpx;
+  font-size: 24px;
+  margin-right: 12px;
 }
 
 .location-text {
   flex: 1;
-  font-size: 28rpx;
-  color: #333;
-  margin-left: 20rpx;
+  font-size: 15px;
+  color: #5A4B38;
 }
 
-.category-tabs {
-  background: white;
-  border-radius: 20rpx;
-  padding: 20rpx;
+.category-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #5A4B38;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.category-grid {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  gap: 12px;
 }
 
-.tab-item {
+.category-card {
+  flex: 1;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20rpx;
-  border-radius: 10rpx;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
+  transition: background-color 0.2s;
 }
 
-.tab-emoji {
-  font-size: 36rpx;
+.category-card:active {
+  background-color: #F5F3ED;
 }
 
-.tab-item.active {
-  background-color: #e6f7ff;
+.category-card.active {
+  background-color: #7BAE7F;
 }
 
-.tab-text {
-  font-size: 24rpx;
-  color: #666;
-  margin-top: 10rpx;
+.category-emoji {
+  font-size: 32px;
+  margin-bottom: 8px;
 }
 
-.tab-item.active .tab-text {
-  color: #1890ff;
-  font-weight: bold;
+.category-name {
+  font-size: 14px;
+  color: #5A4B38;
+}
+
+.category-card.active .category-name {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.poi-section {
+  flex: 1;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-emoji {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.loading-text {
+  font-size: 15px;
+  color: #8B7355;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-emoji {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: #8B7355;
 }
 
 .poi-list {
-  flex: 1;
-  background: white;
-  border-radius: 20rpx;
-  padding: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.loading,
-.empty {
-  text-align: center;
-  padding: 100rpx 0;
-  color: #999;
-  font-size: 28rpx;
-}
-
-.poi-item {
+.poi-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  padding: 30rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
+  transition: background-color 0.2s;
 }
 
-.poi-item:last-child {
-  border-bottom: none;
+.poi-card:active {
+  background-color: #F5F3ED;
 }
 
-.poi-icon {
-  width: 80rpx;
-  height: 80rpx;
-  background-color: #e6f7ff;
+.poi-icon-box {
+  width: 48px;
+  height: 48px;
+  background-color: #F9F7F3;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20rpx;
+  margin-right: 12px;
 }
 
 .poi-emoji {
-  font-size: 32rpx;
+  font-size: 24px;
 }
 
 .poi-info {
@@ -310,32 +373,36 @@ export default {
 }
 
 .poi-name {
-  font-size: 30rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10rpx;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5A4B38;
   display: block;
+  margin-bottom: 4px;
 }
 
 .poi-address {
-  font-size: 24rpx;
-  color: #666;
-  margin-bottom: 8rpx;
+  font-size: 14px;
+  color: #8B7355;
   display: block;
+  margin-bottom: 8px;
+}
+
+.poi-meta {
+  display: flex;
+  align-items: center;
 }
 
 .poi-distance {
-  font-size: 22rpx;
-  color: #1890ff;
-  display: block;
-}
-
-.poi-action {
-  margin-left: 20rpx;
+  font-size: 13px;
+  color: #F5A65B;
 }
 
 .poi-arrow {
-  font-size: 40rpx;
-  color: #999;
+  margin-left: 12px;
+}
+
+.arrow-icon {
+  font-size: 24px;
+  color: #E8E5E0;
 }
 </style>

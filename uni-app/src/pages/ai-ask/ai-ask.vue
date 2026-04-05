@@ -1,11 +1,11 @@
 <template>
   <view class="container">
     <view class="header">
-    <view class="back-btn" @tap="goBack">
-      <text class="back-icon">‹</text>
+      <view class="back-btn" @tap="goBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="title">问问老师</text>
     </view>
-    <text class="title">AI速问</text>
-  </view>
 
     <view class="chat-container">
       <scroll-view class="message-list" scroll-y :scroll-into-view="scrollToView">
@@ -14,15 +14,16 @@
             <text class="message-text">{{ msg.content }}</text>
           </view>
         </view>
+        
         <view v-if="loading" class="message-item ai-message">
           <view class="message-content">
-            <text class="message-text">正在思考中...</text>
+            <text class="message-text">老师正在思考呢～</text>
           </view>
         </view>
       </scroll-view>
 
       <view class="input-area">
-        <input class="input-box" v-model="inputText" placeholder="请输入您的问题..." @confirm="sendMessage" />
+        <input class="input-box" v-model="inputText" placeholder="想问什么就写下来吧" @confirm="sendMessage" />
         <view class="send-btn" @tap="sendMessage">
           <text class="send-icon">✈️</text>
         </view>
@@ -38,7 +39,7 @@ export default {
       messages: [
         {
           role: 'ai',
-          content: '您好！我是AI育儿助手，有什么可以帮助您的吗？'
+          content: '您好！我是育儿老师，有什么可以帮助您的吗？'
         }
       ],
       inputText: '',
@@ -50,10 +51,10 @@ export default {
     goBack() {
       uni.navigateBack();
     },
-    async sendMessage() {
+    sendMessage() {
       if (!this.inputText.trim()) {
         uni.showToast({
-          title: '请输入内容',
+          title: '请先写点内容哦',
           icon: 'none'
         });
         return;
@@ -71,7 +72,7 @@ export default {
 
       try {
         uni.request({
-          url: 'http://localhost:8888/api/rag/chat',
+          url: 'http://localhost:8081/api/rag/chat',
           method: 'POST',
           data: {
             question: userMessage,
@@ -86,12 +87,12 @@ export default {
             if (res.statusCode === 200 && res.data) {
               this.messages.push({
                 role: 'ai',
-                content: res.data.answer || '抱歉，我暂时无法回答这个问题。'
+                content: res.data.answer || '抱歉，老师暂时不知道怎么回答这个问题。'
               });
             } else {
               this.messages.push({
                 role: 'ai',
-                content: '抱歉，服务暂时不可用。'
+                content: '抱歉，老师现在有点忙，请稍后再问。'
               });
             }
             this.scrollToBottom();
@@ -101,7 +102,7 @@ export default {
             console.error('网络错误:', err);
             this.messages.push({
               role: 'ai',
-              content: '网络错误，请稍后重试。'
+              content: '网络好像不太顺畅，请稍后再试～'
             });
             this.scrollToBottom();
           }
@@ -111,7 +112,7 @@ export default {
         console.error('异常:', error);
         this.messages.push({
           role: 'ai',
-          content: '网络错误，请稍后重试。'
+          content: '网络好像不太顺畅，请稍后再试～'
         });
         this.scrollToBottom();
       }
@@ -127,39 +128,39 @@ export default {
 
 <style scoped>
 .container {
-  height: 100vh;
-  background-color: #f5f5f5;
+  min-height: 100vh;
+  background-color: #F9F7F3;
   display: flex;
   flex-direction: column;
 }
 
 .header {
-  background: white;
-  padding: 20rpx;
+  background-color: #FFFFFF;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
 }
 
 .back-btn {
-  width: 60rpx;
-  height: 60rpx;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .back-icon {
-  font-size: 48rpx;
-  color: #333;
+  font-size: 28px;
+  color: #5A4B38;
 }
 
 .title {
   flex: 1;
   text-align: center;
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  color: #5A4B38;
 }
 
 .chat-container {
@@ -171,11 +172,11 @@ export default {
 
 .message-list {
   flex: 1;
-  padding: 20rpx;
+  padding: 20px;
 }
 
 .message-item {
-  margin-bottom: 20rpx;
+  margin-bottom: 16px;
   display: flex;
 }
 
@@ -188,51 +189,69 @@ export default {
 }
 
 .message-content {
-  max-width: 70%;
-  padding: 20rpx 30rpx;
-  border-radius: 20rpx;
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 12px;
 }
 
 .user-message .message-content {
-  background-color: #52c41a;
-  color: white;
+  background-color: #7BAE7F;
+  color: #FFFFFF;
 }
 
 .ai-message .message-content {
-  background-color: white;
-  color: #333;
+  background-color: #FFFFFF;
+  color: #5A4B38;
+  box-shadow: 0 2px 8px rgba(90, 75, 56, 0.08);
 }
 
 .message-text {
-  font-size: 28rpx;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .input-area {
-  background: white;
-  padding: 20rpx;
+  background-color: #FFFFFF;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1px solid #E8E5E0;
 }
 
 .input-box {
   flex: 1;
-  height: 80rpx;
-  background-color: #f5f5f5;
-  border-radius: 40rpx;
-  padding: 0 30rpx;
-  font-size: 28rpx;
+  height: 44px;
+  background-color: #F5F3ED;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 15px;
+  color: #5A4B38;
+  transition: border-color 0.2s;
+}
+
+.input-box:focus {
+  border-color: #7BAE7F;
 }
 
 .send-btn {
-  width: 80rpx;
-  height: 80rpx;
-  background-color: #52c41a;
+  width: 44px;
+  height: 44px;
+  background-color: #7BAE7F;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 20rpx;
+  margin-left: 12px;
+  transition: background-color 0.2s;
+}
+
+.send-btn:active {
+  background-color: #6BA36E;
+}
+
+.send-icon {
+  font-size: 20px;
+  color: #FFFFFF;
 }
 </style>

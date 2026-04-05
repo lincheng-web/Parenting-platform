@@ -1,6 +1,16 @@
+com\parenting\boot\utils\JwtUtils.class
+com\parenting\boot\controller\SysConfigController.class
+com\parenting\boot\controller\SysLogController.class
+com\parenting\boot\controller\SysPermissionController.class
+com\parenting\boot\config\SecurityConfig.class
+com\parenting\boot\controller\SysRoleController.class
+com\parenting\boot\controller\AdminLoginController.class
 com\parenting\boot\config\RestTemplateConfig.class
 com\parenting\boot\controller\RagController.class
+com\parenting\boot\controller\SysMenuController.class
 com\parenting\boot\controller\ExploreController.class
 com\parenting\boot\config\RedisConfig.class
 com\parenting\boot\config\LangChain4jConfig.class
-com\parenting\boot\ParentingApplication.class
+com\parenting\boot\aspect\LogAspect.class
+com\parenting\boot\filter\JwtAuthenticationFilter.class
+com\parenting\boot\controller\SysAdminController.class
